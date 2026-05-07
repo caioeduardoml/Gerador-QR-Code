@@ -1,73 +1,35 @@
-# React + TypeScript + Vite
+# 🚀 QR Code Generator Pro
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Um gerador de QR Code moderno, rápido e totalmente personalizado, desenvolvido para facilitar a criação de códigos dinâmicos com estilo.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🛠️ Tecnologias Utilizadas
 
-## React Compiler
+Este projeto foi construído utilizando as tecnologias mais modernas do ecossistema Web:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+-   **React.js** (Frontend Library)
+-   **TypeScript** (Segurança e Tipagem)
+-   **Vite** (Build Tool ultra-rápida)
+-   **TailwindCSS** (Estilização Utilitária)
+-   **qrcode.react** (Biblioteca para geração dos códigos)
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## ✨ Funcionalidades
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+-   **Link Personalizado:** Insira qualquer URL ou texto para gerar o QR Code instantaneamente.
+-   **Customização de Cores:** -   Mude a cor do **QR Code** (Foreground).
+    -   Mude a cor do **Fundo** (Background).
+-   **Preview em Tempo Real:** Veja as mudanças acontecerem enquanto você digita ou escolhe as cores.
+-   **Responsivo:** Layout otimizado para dispositivos móveis e desktops.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 🚀 Como rodar o projeto localmente
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Como você já tem o Node.js instalado no seu Arch Linux, basta seguir estes passos:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+1. **Clone o repositório:**
+   ```bash
+   git clone [https://github.com/caioeduardoml/Gerador-QR-Code.git](https://github.com/caioeduardoml/Gerador-QR-Code.git)
