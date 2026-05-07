@@ -26,6 +26,11 @@ Este projeto foi construído utilizando as tecnologias mais modernas do ecossist
 
 ---
 
+## 🚀 Site
+https://geradorqr-code.netlify.app/
+
+---
+
 ## 🚀 Como rodar o projeto localmente
 
 Como você já tem o Node.js instalado no seu Arch Linux, basta seguir estes passos:
