@@ -40,7 +40,7 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center p-4 md:p-10 font-sans text-gray-800">
       <header className="w-full max-w-md flex items-center justify-between mb-6">
-        <h1 className="text-xl font-bold text-indigo-600">GitHub: @naoexistenao</h1>
+        <h1 className="text-xl font-bold text-indigo-600">GitHub: @caioeduardoml</h1>
         <img 
           src={avatar}
           alt="Avatar" 
