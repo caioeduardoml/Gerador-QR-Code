@@ -1,115 +1,73 @@
-import { useState, useRef } from 'react';
-import {QRCode} from 'react-qr-code';
-import { toPng } from 'html-to-image';
-import avatar from "./assets/eu.jpeg";
+import React, { useState, useEffect, useCallback } from 'react';
+import { SuspenseLoader } from '~components/SuspenseLoader';
+import { QrHeader, QrFooter } from '~features/qr-generator';
 
-function App() {
-  const [link, setLink] = useState('https://google.com');
-  const [fgColor, setFgColor] = useState('#000000');
-  const [bgColor, setBgColor] = useState('#ffffff');
-  const [image, setImage] = useState<string | null>(null);
-  const qrRef = useRef(null);
+const LazyQrGeneratorWorkspace = React.lazy(
+  () => import('~features/qr-generator/components/QrGeneratorWorkspace')
+);
 
-  // Função para ler o arquivo de imagem do usuário
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const file = e.target.files?.[0]; 
-  if (file) {
-    const reader = new FileReader();
-    
-    reader.onload = (event: ProgressEvent<FileReader>) => {
-      const result = event.target?.result;
-      if (typeof result === 'string') {
-        setImage(result);
-      }
-    };
-    reader.readAsDataURL(file);
-  }
-};
-
-  const downloadQR = () => {
-    if (qrRef.current) {
-      toPng(qrRef.current).then((dataUrl) => {
-        const link = document.createElement('a');
-        link.download = 'meu-qrcode.png';
-        link.href = dataUrl;
-        link.click();
-      });
+export const App: React.FC = () => {
+  const [isDark, setIsDark] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    const saved = window.localStorage.getItem('qr-studio-theme');
+    if (saved === 'dark' || saved === 'light') {
+      return saved === 'dark';
     }
-  };
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (isDark) {
+      root.classList.add('dark');
+      window.localStorage.setItem('qr-studio-theme', 'dark');
+    } else {
+      root.classList.remove('dark');
+      window.localStorage.setItem('qr-studio-theme', 'light');
+    }
+  }, [isDark]);
+
+  const handleToggleTheme = useCallback(() => {
+    setIsDark((prev) => !prev);
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center p-4 md:p-10 font-sans text-gray-800">
-      <header className="w-full max-w-md flex items-center justify-between mb-6">
-        <h1 className="text-xl font-bold text-indigo-600">GitHub: @caioeduardoml</h1>
-        <img 
-          src={avatar}
-          alt="Avatar" 
-          className="w-20 h-25 rounded-full border-2 border-indigo-200"
-        />
-      </header>
-      <h1 className="text-2xl md:text-4xl font-bold mb-6 text-indigo-600 text-center">
-        Gerador QR Code
-      </h1>
+    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-200 relative overflow-hidden">
+      {/* Elementos decorativos de iluminacao de fundo (Glassmorphism) */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed -top-40 -left-40 w-96 h-96 rounded-full bg-blue-500/10 dark:bg-blue-500/15 blur-3xl"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed top-1/3 -right-40 w-96 h-96 rounded-full bg-indigo-500/10 dark:bg-indigo-500/15 blur-3xl"
+      />
 
-      <div className="w-full max-w-md bg-white p-6 rounded-2xl shadow-lg space-y-6">
-        
-        {/* Contêiner Pai com relative para posicionar a imagem */}
-        <div ref={qrRef} className="relative flex justify-center p-4 bg-white">
-          <QRCode value={link} fgColor={fgColor} bgColor={bgColor} size={200} />
-          
-          {/* Imagem Centralizada com absolute */}
-          {image && (
-            <img 
-              src={image} 
-              alt="Centro" 
-              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full border-2 border-white bg-white"
-            />
-          )}
+      <QrHeader isDark={isDark} onToggleTheme={handleToggleTheme} />
+
+      <main className="flex-1 w-full px-4 sm:px-6 pt-8 pb-6 z-10">
+        <div className="max-w-3xl mx-auto text-center mb-8">
+          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100/90 text-blue-800 dark:bg-blue-950/80 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800/70 mb-3">
+            Personalizacao em Tempo Real
+          </span>
+          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50">
+            Crie QR Codes Profissionais com Sua Identidade Visual
+          </h1>
+          <p className="mt-2.5 text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl mx-auto">
+            Configure links, redes Wi-Fi, WhatsApp ou e-mails, valide o
+            contraste de leitura automaticamente e exporte em PNG de alta
+            definicao ou SVG vetorial.
+          </p>
         </div>
 
-        {/* Inputs */}
-        <input 
-          type="text" 
-          placeholder="Cole seu link aqui..."
-          className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
-          onChange={(e) => setLink(e.target.value)}
-        />
+        <SuspenseLoader>
+          <LazyQrGeneratorWorkspace />
+        </SuspenseLoader>
+      </main>
 
-        {/* Input de Imagem */}
-        <div>
-          <label className="block text-sm font-medium mb-1">Imagem Central</label>
-          <input 
-            type="file" 
-            accept="image/*" 
-            onChange={handleImageChange}
-            className="w-full p-2 border rounded-lg cursor-pointer text-sm"
-          />
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium">Cor do Código</label>
-            <input type="color" className="w-full h-10 cursor-pointer" value={fgColor} onChange={(e) => setFgColor(e.target.value)} />
-          </div>
-          <div>
-            <label className="block text-sm font-medium">Cor de Fundo</label>
-            <input type="color" className="w-full h-10 cursor-pointer" value={bgColor} onChange={(e) => setBgColor(e.target.value)} />
-          </div>
-        </div>
-
-        <button 
-          onClick={downloadQR}
-          className="w-full bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700 transition"
-        >
-          Baixar QR Code
-        </button>
-      </div>
-      <footer className="mt-auto pt-10 pb-4 text-center text-gray-500 text-sm">
-        <p>Desenvolvido por</p>
-        <p className="font-bold text-indigo-600">Caio Eduardo</p>
-      </footer>
+      <QrFooter />
     </div>
   );
-}
+};
 
 export default App;
